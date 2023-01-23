@@ -12,7 +12,7 @@ const app = express();
 app.use(express.json());
 
 app.use('/companies', compRoutes)
-// app.use('/invoices', invoiceRoutes)
+app.use('/invoices', invoiceRoutes)
 
 /** 404 handler */
 

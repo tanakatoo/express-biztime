@@ -9,9 +9,21 @@ router.get('/', async (req, res, next) => {
 })
 
 router.get('/:code', async (req, res, next) => {
-    const { code } = req.params
-    const results = await db.query(`SELECT * FROM companies WHERE code='${code}'`)
-    return res.json({ company: results.rows[0] })
+    try {
+        const { code } = req.params
+        const resultsComp = await db.query(`SELECT * FROM companies WHERE code=$1`, [code])
+        const resultsInv = await db.query(`SELECT * FROM invoices WHERE comp_code = $1`, [code])
+        if (resultsComp.rows[0]) {
+            return res.json({ company: resultsComp.rows[0], invoices: resultsInv.rows })
+        } else {
+            return next()
+        }
+
+    } catch (e) {
+        const err = new ExpressError(`Not sure what happened, ${e}`, 404)
+        next(err)
+    }
+
 })
 
 router.post('/', async (req, res, next) => {
