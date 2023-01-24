@@ -15,7 +15,9 @@ beforeEach(async function () {
 
 afterEach(async function () {
     let results = await db.query("DELETE FROM invoices")
+    // await db.query("ROLLBACK")
     let results2 = await db.query("DELETE FROM companies")
+    // await db.query("ROLLBACK")
 });
 
 afterAll(async function () {

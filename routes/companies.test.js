@@ -12,6 +12,7 @@ beforeEach(async function () {
 
 afterEach(async function () {
     let results = await db.query("DELETE FROM companies")
+    // await db.query("ROLLBACK")
 })
 
 afterAll(async function () {
@@ -41,7 +42,8 @@ describe('GET /companies', () => {
                 description: "It is very blue with lines",
 
             },
-            invoices: []
+            invoices: [],
+            industries: []
         })
     })
 
@@ -60,11 +62,11 @@ describe('GET /companies', () => {
 
 describe('/POST route', function () {
     test("post new company", async () => {
-        const res = await request(app).post('/companies').send({ code: "fake", name: "Fake Company", description: "The fakest company yet" })
+        const res = await request(app).post('/companies').send({ name: "Fake Company", description: "The fakest company yet" })
         expect(res.statusCode).toBe(201)
         expect(res.body).toEqual({
             company: {
-                code: 'fake',
+                code: 'Fake-Company',
                 name: "Fake Company",
                 description: "The fakest company yet"
             }
